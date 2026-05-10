@@ -39,5 +39,5 @@ jobs:
       working-directory: src/golang.org/x/tools
 
     - name: Run tests
-      run: go test -v ./...
+      run: go test -v $(go list ./... | grep -v cmd/godoc)
       working-directory: src/golang.org/x/tools

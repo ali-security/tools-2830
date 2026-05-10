@@ -11,22 +11,30 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-22.04]
-        go-version: ['1.13']
+        go-version: ['1.11']
 
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
+      with:
+        path: src/golang.org/x/tools
 
     - name: Set up Go
       uses: actions/setup-go@v4
       with:
         go-version: ${{ matrix.go-version }}
 
+    - name: Set GOPATH
+      run: echo "GOPATH=${{ github.workspace }}" >> $GITHUB_ENV
+
     - name: Download dependencies
-      run: go get -v ./...
+      run: go get -v -d ./...
+      working-directory: src/golang.org/x/tools
 
     - name: Build
       run: go build -v ./...
+      working-directory: src/golang.org/x/tools
 
     - name: Run tests
       run: go test -v ./...
+      working-directory: src/golang.org/x/tools
